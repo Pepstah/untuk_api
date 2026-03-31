@@ -1,7 +1,5 @@
 # import requests
-
 # response = requests.get("https://jsonplaceholder.typicode.com/albums")
-
 # print(response)
 
 # pip install fastapi uvicorn
