@@ -4,43 +4,38 @@ response = requests.get("https://jsonplaceholder.typicode.com/albums")
 
 print(response)
 
-# import requests
-
-# response = requests.get("https://jsonplaceholder.typicode.com/albums")
-
-# print(response)
-
-# # Kalau pengen lihat response codenya
-# print(response.status_code)
-
-# # Ini adalah hasilnya (kebetulan kita tau bentuknysa adalah JSON)
-# print(response.json())
-
-# Yang dibutuhin tadi ada
 # pip install fastapi uvicorn
 
 # import library
 from fastapi import FastAPI
 
 # Bikin instance FastAPI
-# PERHATIKAN NAMA VARIABELNYA !
+# PERHATIKAN NAMA VARIABELNYA!
 app = FastAPI()
 
+
 # Tentukan dulu URLnya itu (Endpointnya) itu yang mana?
-# https://localhost"/"
-# GET /albums
+# http://localhost"/"
+# GET /
 @app.get("/")
-def mengembalikan_data_dari_slash():
+def fetch_slash():
+    """Fetch data from Root Endpoint
+
+    Returns:
+        dict: Return Hello World
+    """
     return {"hello": "world"}
+
 
 # GET /albums
 @app.get("/albums")
 def fetch_albums():
     return {"data": {"albums": [{"id": 1, "name": "Album A"}]}}
 
+
 # GET /albums/"name" (name adalah variabel yang dinamis)
 @app.get("/albums/{name}")
-def fetch_albums_by_name(name): # name HARUS sama dengan yang di CURLY BRACKET
+def fetch_albums_by_name(name):  # name HARUS sama dengan yang ada di CURLY BRACKET
     return {
         "data": {
             "album_name": name,
@@ -48,38 +43,47 @@ def fetch_albums_by_name(name): # name HARUS sama dengan yang di CURLY BRACKET
         }
     }
 
+
 # Ini list kosongan
 albums = []
 
-# Ini sekarang punya endpoint /albums TAPI PAKE POST
+
+# Ini sekarang gw punya endpoint /albums TAPI PAKE POST
 # POST /albums
 @app.post("/albums")
-# PERHATIKAN BAIK BAIK DI SINI ADA PARAMETER YANG KAMU DEFINISIKAN 
-# DI SINI DIKASIH namanya adalah "album_baru"
-def add_album_baru(album_baru):
-    # Di sini tuh bagian logic, pengen diapain pun OK
-    print(f"Album baru yang ditambahkan adalah: {album_baru}")
+# PERHATIKAN BAIK BAIK DI SINI ADA PARAMETER YANG KAMU DEFINISIKAN
+# DI SINI GW KASIH namanya adalah "album_baru"
+# tipe data dari parameter "album_baru" adalah suatu dictionary
+def add_album_baru(album_baru: dict):
+    # Di sini tuh bagian logic, pengen diapain pun OKE
+    print(f"Album baru yang ditambakan adalah: {album_baru}")
+    print(f"type data dari album baru adalah {type(album_baru)}")
 
-    # YANG PENTING JANGAN LUPA RETURN:
-    # Ceritanya ini palsu, ga ditambahkan apa-apa
+    albums.append(album_baru)
+
+    print(f"Isi dari album sekarang adalah {albums}")
+
+    # YANG PENTING JANGAN LUPA RETURN!
+    # Ceritanya ini palsu, ga ditambahin apa-apa
     return {"result": "Data berhasil ditambahkan"}
 
 
 # Convention:
-# untuk nama Endpoint, itu biasanya JANGAN ADA KATA PERINTAHNYA
-# GET /albums
-# GET /albums/{id}
+# untuk nama Endpoint, itu biasanya JANGAN ADA KATA KATA PERINTAHNYA
+# GET  /albums
+# GET  /albums/{id}
 # POST /albums
 
-# GET /fetch-albums
+# GET  /fetch-albums
 # POST /add-albums
 
-# GET /albums_top_10/ --> kurang tepat karena biasanya adalah -
+# GET /albums_top_10/ <-- kurang tepat, karena biasanya adalah -
 # GET /albums-top-10
 
 # Biasanya resourcenya itu di GROUPING
 # GET /albums/
 # GET /albums/top-ten
 
+
 # Kalau udah tinggal "JALANIN"
-# uvicorn nama_file_tanpa_py:nama_variabel_fast_api --reload
+# uvicorn nama_file_tanpa_py:nama_variabe_fast_api --reload
